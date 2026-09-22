@@ -1,0 +1,60 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the article below."
+title: "STAR-VAE: A Scalable Latent-Variable Transformer for Controllable Molecular Generation"
+type: software
+version: 1.0.0
+license: LicenseRef-OpenMDW-1.0
+repository-code: "https://github.com/BiomedSciAI/STAR-VAE"
+url: "https://arxiv.org/abs/2511.02769"
+authors:
+  - family-names: Kwon
+    given-names: Bum Chul
+  - family-names: Shapira
+    given-names: Ben
+  - family-names: Raboh
+    given-names: Moshiko
+  - family-names: Sethi
+    given-names: Shreyans
+  - family-names: Murarka
+    given-names: Shruti
+  - family-names: Morrone
+    given-names: Joseph A.
+  - family-names: Zhang
+    given-names: Leili
+  - family-names: Cornell
+    given-names: Wendy
+  - family-names: Meyer
+    given-names: Pablo
+  - family-names: Hu
+    given-names: Jianying
+  - family-names: Suryanarayanan
+    given-names: Parthasarathy
+preferred-citation:
+  type: article
+  title: "STAR-VAE: A Scalable Latent-Variable Transformer for Controllable Molecular Generation"
+  year: 2026
+  journal: "arXiv"
+  url: "https://arxiv.org/abs/2511.02769"
+  authors:
+    - family-names: Kwon
+      given-names: Bum Chul
+    - family-names: Shapira
+      given-names: Ben
+    - family-names: Raboh
+      given-names: Moshiko
+    - family-names: Sethi
+      given-names: Shreyans
+    - family-names: Murarka
+      given-names: Shruti
+    - family-names: Morrone
+      given-names: Joseph A.
+    - family-names: Zhang
+      given-names: Leili
+    - family-names: Cornell
+      given-names: Wendy
+    - family-names: Meyer
+      given-names: Pablo
+    - family-names: Hu
+      given-names: Jianying
+    - family-names: Suryanarayanan
+      given-names: Parthasarathy

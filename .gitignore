@@ -1,0 +1,189 @@
+# ── Python ────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+MANIFEST
+.eggs/
+dist/
+build/
+develop-eggs/
+.installed.cfg
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+sdist/
+var/
+
+# ── uv / venv ─────────────────────────────────────────────────────────────────
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.python-version
+__pypackages__/
+
+# ── Jupyter ───────────────────────────────────────────────────────────────────
+.ipynb_checkpoints/
+
+# ── Testing / coverage ────────────────────────────────────────────────────────
+.coverage
+.coverage.*
+.cache
+.pytest_cache/
+htmlcov/
+.tox/
+.nox/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+
+# ── Type checkers ─────────────────────────────────────────────────────────────
+.mypy_cache/
+.ruff_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+
+# ── Editors / OS ──────────────────────────────────────────────────────────────
+.DS_Store
+.vscode/
+.spyderproject
+.spyproject
+.ropeproject
+profile_default/
+ipython_config.py
+
+# ── Logs ──────────────────────────────────────────────────────────────────────
+*.log
+logs/
+lightning_logs/
+wandb/
+**/wandb/
+events.out.tfevents.*
+
+# ── Generated outputs (not for git, share via HuggingFace / Zenodo) ─────────
+outputs/
+output*/
+checkpoints/
+paper_results/
+correlation_analysis_results/
+correlation_analysis_results_chembl/
+fingerprint_*/
+fingerprint_regressor_results*/
+expt_summ*
+bkp/
+cache*/
+data_root/
+/data/
+*.ckpt
+*.pt
+*.pth
+*.safetensors
+*.sdf
+*.sdf.gz
+
+# ── Staging / upload artifacts ────────────────────────────────────────────────
+star_vae_checkpoints.zip
+star_vae_checkpoints_v1.0.0.zip
+star_vae_checkpoints_v*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.zip
+
+# ── Data files ────────────────────────────────────────────────────────────────
+data/moses_processed/
+_unused_data/
+
+# ── Environment config (personal, must NOT be committed) ─────────────────────
+.env
+.conda_config
+
+# ── Images / binary assets (not tracked) ─────────────────────────────────────
+*.png
+*.svg
+*.pdf
+
+# ── Misc ──────────────────────────────────────────────────────────────────────
+*.manifest
+*.spec
+pip-log.txt
+pip-delete-this-directory.txt
+*.mo
+*.pot
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+.scrapy
+docs/_build/
+/site
+celerybeat-schedule
+celerybeat.pid
+*.sage.py
+instance/
+.webassets-cache
+tmpyaml/
+guacomol_gd/
+sow32/
+
+# Internal-only directories (not for public release)
+papers/
+legacy_project_files/
+.bob
+_unused_data
+
+# Internal review/orchestration files (not part of the released software)
+.opencode/
+opencode.json
+AGENTS.md
+OSS_RELEASE_REVIEW.md
+film-revision.md
+
+# Internal scheduler and manuscript-revision utilities
+bmfm_sm_gen/scripts/revision_*.py
+bmfm_sm_gen/scripts/revision_*.sh
+bmfm_sm_gen/scripts/*_lsf.sh
+bmfm_sm_gen/scripts/*_submit*.sh
+tests/test_revision_*.py
+
+# Historical one-off experiment scripts not included in the supported release
+bmfm_sm_gen/scripts/*.py
+!bmfm_sm_gen/scripts/__init__.py
+!bmfm_sm_gen/scripts/exp02_run_moses_full_metrics.py
+!bmfm_sm_gen/scripts/exp16_prep_stratified_tartarus.py
+!bmfm_sm_gen/scripts/exp16_generate_tartarus.py
+!bmfm_sm_gen/scripts/exp16_dock_tartarus.py
+!bmfm_sm_gen/scripts/exp17c_sa_score_generate.py
+!bmfm_sm_gen/scripts/exp17c_generate.py
+!bmfm_sm_gen/scripts/exp18_drugdiff_download_checkpoints.py
+!bmfm_sm_gen/scripts/exp19_train_ablation.py
+!bmfm_sm_gen/scripts/exp19_generate_ablation.py
+!bmfm_sm_gen/scripts/exp19_evaluate_ablation.py
+!bmfm_sm_gen/scripts/revision_b2_sa_denominators.py
+!bmfm_sm_gen/scripts/revision_c1_docking_attempt_level.py
+!bmfm_sm_gen/scripts/revision_c2_ablation_uncertainty.py
+!bmfm_sm_gen/scripts/revision_c3_rebuild_rediscovery_table.py
+!bmfm_sm_gen/scripts/revision_c4_recompute_docking_summary.py
+
+# Local backups and temporary files
+*.bak
+*.bak.*
+*~
+*.orig
+*.rej
+
+# TeX and documentation build intermediates
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.synctex.gz
+*.toc

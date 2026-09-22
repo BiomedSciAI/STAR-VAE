@@ -1,0 +1,95 @@
+# ============================================================
+# configs/model_vae_zvela_label_conditioning_lora_prior_template.yaml
+# Template config for label-conditioned CVAE fine-tuning.
+# Used for: GuacaMol goal-directed (Exp 4), ChEMBL rediscovery (Exp 9),
+#           and any custom target fine-tuning.
+#
+# Usage:
+#   python -m bmfm_sm_gen.launch.run_train fit \
+#     --config configs/model_vae_zvela_label_conditioning_lora_prior_template.yaml \
+#     --data.init_args.train_csv /path/to/train.csv \
+#     --data.init_args.val_csv /path/to/val.csv \
+#     --trainer.default_root_dir outputs/my_experiment
+# ============================================================
+
+model:
+  class_path: bmfm_sm_gen.trainers.lm_cvae.CVAELightningModule
+  init_args:
+    model_class: bmfm_sm_gen.models.cvae.ConditionalTransformerVAE
+    model_params:
+      d_model: 512
+      nhead: 8
+      num_encoder_layers: 12
+      num_decoder_layers: 12
+      dim_feedforward: 2048
+      latent_dim: 256
+      dropout: 0.1
+      max_len: 71
+      num_tasks: 1
+    pretrained_path: ${oc.env:PRETRAINED_VAE_CKPT}
+    lora: both
+    use_conditional_prior: True
+    modulation_scheme: 'film'
+    tokenizer: ${data.init_args.tokenizer}
+    vocab_file: ${data.init_args.vocab_file}
+    learning_rate: 0.00005
+    val_csv: ${data.init_args.val_csv}
+
+    # Cyclical β-annealing with free bits
+    use_cyclical_annealing: True
+    n_cycles: 3
+    ratio: 0.4
+    free_bits: 0.3
+
+    # Property prediction auxiliary loss
+    use_property_prediction: True
+    lambda_prop: 0.15
+
+    # Dimension-wise KLD monitoring
+    use_dimension_wise_kl: True
+    min_kl_per_dim: 0.01
+
+data:
+  class_path: 'bmfm_sm_gen.data.dm_mol.MolecularDataModule'
+  init_args:
+    train_mode: mem
+    data_dir: null
+    # Override these paths on the command line or in a derived config:
+    train_csv: ${oc.env:DATA_DIR,data}/guacamol/train.csv
+    val_csv: ${oc.env:DATA_DIR,data}/guacamol/val.csv
+    tokenizer: "bmfm_sm_gen.data.base_tokenizer.SELFIESTokenizer"
+    vocab_file: ${oc.env:VOCAB_FILE}
+    max_len: 71
+    batch_size: 128
+    dataset_args:
+      modality: 'selfies'
+      padding: max_length
+      label_columns:
+        - y_normalized_minmax
+
+trainer:
+  max_epochs: 20
+  devices: 1
+  num_nodes: 1
+  accelerator: auto
+  default_root_dir: ${oc.env:OUTPUT_DIR,outputs}/cvae_label_conditioning
+  logger:
+    class_path: 'pytorch_lightning.loggers.TensorBoardLogger'
+    init_args:
+      save_dir: '${trainer.default_root_dir}'
+  log_every_n_steps: 10
+  callbacks:
+    - class_path: pytorch_lightning.callbacks.ModelCheckpoint
+      init_args:
+        monitor: val_loss
+        filename: 'vae-epoch{epoch:02d}-step{step}-val_loss{val_loss:.2f}'
+        save_top_k: 3
+        mode: min
+        save_last: true
+        save_on_train_epoch_end: False
+    - class_path: 'pytorch_lightning.callbacks.EarlyStopping'
+      init_args:
+        patience: 100
+        monitor: val_loss
+        mode: min
+  val_check_interval: 0.25

@@ -1,0 +1,73 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  bounded-checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      - name: Install Python 3.11
+        run: uv python install 3.11
+      - name: Install development environment
+        run: uv sync --frozen --extra dev --extra analysis
+      - name: Compile supported package and examples
+        run: uv run python -m compileall -q bmfm_sm_gen examples tests
+      - name: Check every installed entry point
+        env:
+          CLEARML_ENABLE: "False"
+        run: |
+          uv run star-vae-generate --help
+          uv run star-vae-generate cli --help
+          uv run star-vae-generate-bulk --help
+          uv run star-vae-train --help
+      - name: Check documented source CLI help
+        env:
+          CLEARML_ENABLE: "False"
+        run: |
+          uv run python examples/generate_unconditional.py --help
+          uv run python examples/generate_conditional.py --help
+          uv run python -m bmfm_sm_gen.launch.run_generate_random_molecules_conditional --help
+          uv run python bmfm_sm_gen/data_prep/prep_sa_score_minmax.py --help
+          uv run python bmfm_sm_gen/data_prep/prep_moses_selfies.py --help
+          uv run python bmfm_sm_gen/scripts/exp02_run_moses_full_metrics.py --help
+          uv run python bmfm_sm_gen/scripts/exp16_prep_stratified_tartarus.py --help
+          uv run python bmfm_sm_gen/scripts/exp16_generate_tartarus.py --help
+          uv run python bmfm_sm_gen/scripts/exp16_dock_tartarus.py --help
+          uv run python bmfm_sm_gen/scripts/exp17c_sa_score_generate.py --help
+          uv run python bmfm_sm_gen/scripts/exp17c_generate.py --help
+          uv run python bmfm_sm_gen/scripts/exp19_train_ablation.py --help
+          uv run python bmfm_sm_gen/scripts/exp19_generate_ablation.py --help
+          uv run python bmfm_sm_gen/scripts/exp19_evaluate_ablation.py --help
+          uv run python bmfm_sm_gen/scripts/exp18_drugdiff_download_checkpoints.py --help
+      - name: Check cheap parser validation paths
+        env:
+          CLEARML_ENABLE: "False"
+        run: |
+          if uv run python bmfm_sm_gen/scripts/exp17c_generate.py \
+            --target all --alpha 1.0 --checkpoint checkpoint.ckpt; then
+            echo "Expected {target} checkpoint validation to fail" >&2
+            exit 1
+          fi
+          if uv run python bmfm_sm_gen/data_prep/prep_sa_score_minmax.py \
+            --input missing.csv --val-fraction 0; then
+            echo "Expected SA split-fraction validation to fail" >&2
+            exit 1
+          fi
+      - name: Run cheap CLI and example validation
+        env:
+          CLEARML_ENABLE: "False"
+        run: uv run pytest tests/test_cli.py tests/test_examples.py -q
+      - name: Run bounded tests
+        run: uv run pytest --ignore=tests/test_cli.py --ignore=tests/test_examples.py -q

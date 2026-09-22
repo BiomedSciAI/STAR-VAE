@@ -1,0 +1,43 @@
+name: Bug report
+description: Report a reproducible STAR-VAE software defect
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: Do not include credentials, private datasets, proprietary molecule data, or security vulnerabilities.
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What happened, and what did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Reproduction
+      description: Provide the exact command and a minimal reproducible example.
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, Python, installation method, CPU/GPU, CUDA, and relevant package versions.
+    validations:
+      required: true
+  - type: dropdown
+    id: external
+    attributes:
+      label: External resources involved
+      options:
+        - None
+        - Checkpoint
+        - Dataset
+        - Docking tool
+        - Third-party baseline
+        - Multiple
+    validations:
+      required: true

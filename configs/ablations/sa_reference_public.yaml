@@ -1,0 +1,64 @@
+# Public reproduction protocol; not claimed as an exact historical Exp19 config.
+model:
+  class_path: bmfm_sm_gen.trainers.lm_cvae.CVAELightningModule
+  init_args:
+    model_class: bmfm_sm_gen.models.cvae.ConditionalTransformerVAE
+    model_params:
+      d_model: 512
+      nhead: 8
+      num_encoder_layers: 12
+      num_decoder_layers: 12
+      dim_feedforward: 2048
+      latent_dim: 256
+      dropout: 0.1
+      max_len: 71
+      num_tasks: 1
+      use_vae: true
+    pretrained_path: ${oc.env:PRETRAINED_VAE_CKPT}
+    lora: both
+    lora_r: 8
+    lora_alpha: 32
+    lora_dropout: 0.05
+    use_conditional_prior: true
+    modulation_scheme: film
+    use_cyclical_annealing: true
+    beta_schedule: cyclical
+    n_cycles: 4
+    ratio: 0.5
+    free_bits: 0.5
+    tokenizer: ${data.init_args.tokenizer}
+    vocab_file: ${data.init_args.vocab_file}
+    learning_rate: 0.0001
+    val_csv: ${data.init_args.val_csv}
+    label_norm: minmax
+    num_bins: 10
+    samples_per_bin: 50
+data:
+  class_path: bmfm_sm_gen.data.dm_mol.MolecularDataModule
+  init_args:
+    train_mode: mem
+    data_dir: ""
+    train_csv: ${oc.env:SA_SCORE_TRAIN_CSV}
+    val_csv: ${oc.env:SA_SCORE_VAL_CSV}
+    tokenizer: bmfm_sm_gen.data.base_tokenizer.SELFIESTokenizer
+    vocab_file: ${oc.env:VOCAB_FILE}
+    max_len: 71
+    batch_size: 64
+    dataset_args:
+      modality: selfies
+      padding: max_length
+      label_columns: [y_normalized_minmax]
+trainer:
+  max_epochs: 20
+  devices: 1
+  num_nodes: 1
+  accelerator: auto
+  default_root_dir: ${oc.env:OUTPUT_DIR,outputs}/ablations/sa_reference_public
+  log_every_n_steps: 10
+  val_check_interval: 1.0
+  callbacks:
+    - class_path: pytorch_lightning.callbacks.EarlyStopping
+      init_args:
+        monitor: val_loss
+        patience: 8
+        mode: min

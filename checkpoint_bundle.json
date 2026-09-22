@@ -1,0 +1,227 @@
+{
+  "archive": "star_vae_checkpoints_v1.0.0.zip",
+  "version": "1.0.0",
+  "root": "checkpoints",
+  "default_vocabulary": "vae_pubchem80m/vocab.json",
+  "sanitization_defaults": {
+    "attention_heads_by_d_model": {"256": 4, "512": 8},
+    "lora_alpha": 32,
+    "lora_dropout": 0.05
+  },
+  "models": {
+    "vae_pubchem80m": {
+      "checkpoint": "vae_pubchem80m/last.ckpt",
+      "vocabulary": "vae_pubchem80m/vocab.json",
+      "tokenizer": "SELFIESTokenizer",
+      "protocols": ["random-prior", "seed-based"],
+      "config_path": null,
+      "dataset_family": "PubChem-80M",
+      "training_seed": "UNKNOWN",
+      "paper_role": "primary pretrained VAE backbone and generation model",
+      "provenance_caveat": "Historical pretraining config and training seed are not released; exact bitwise reproduction of this last.ckpt is not established."
+    },
+    "vae_moses": {
+      "checkpoint": "vae_moses/last.ckpt",
+      "vocabulary": "vae_pubchem80m/vocab.json",
+      "tokenizer": "SELFIESTokenizer",
+      "protocols": ["random-prior", "seed-based"],
+      "config_path": "configs/model_vae_train_moses.yaml",
+      "dataset_family": "MOSES 1.5M",
+      "training_seed": "UNKNOWN",
+      "paper_role": "MOSES-trained comparison VAE",
+      "provenance_caveat": "The current config is a related public protocol; exact historical source revision is not recorded. This checkpoint uses the declared 328-token PubChem SELFIES vocabulary, not the separately archived MOSES SMILES vocabulary."
+    },
+    "cvae_sa_score": {
+      "checkpoint": "cvae_sa_score/last.ckpt",
+      "vocabulary": "vae_pubchem80m/vocab.json",
+      "tokenizer": "SELFIESTokenizer",
+      "protocols": ["label-conditioned", "seed-and-label"],
+      "config_path": "configs/model_vae_sa_score_minmax_lora_prior.yaml",
+      "dataset_family": "PubChem SA-score sample",
+      "training_seed": "UNKNOWN",
+      "paper_role": "reported SA-score conditional generation model",
+      "provenance_caveat": "The reported checkpoint used two-stage adaptation; the released config is related but does not establish the exact historical two-stage run or seed."
+    },
+    "cvae_b3db": {
+      "checkpoint": "cvae_b3db/last.ckpt",
+      "vocabulary": "vae_pubchem80m/vocab.json",
+      "tokenizer": "SELFIESTokenizer",
+      "protocols": ["label-conditioned", "seed-and-label"],
+      "config_path": null,
+      "dataset_family": "B3DB",
+      "training_seed": "UNKNOWN",
+      "paper_role": "B3DB conditional checkpoint and compatibility example",
+      "provenance_caveat": "Exact historical config, data snapshot, split, and training seed are not released."
+    },
+    "cvae_1syh": {
+      "checkpoint": "cvae_1syh/last.ckpt",
+      "vocabulary": "vae_pubchem80m/vocab.json",
+      "tokenizer": "SELFIESTokenizer",
+      "protocols": ["label-conditioned"],
+      "config_path": null,
+      "dataset_family": "Tartarus 1SYH docking",
+      "training_seed": "UNKNOWN",
+      "paper_role": "original 1SYH conditional model and stratified-model initializer",
+      "provenance_caveat": "Exact historical config and training seed are not released; this is distinct from the current stratified config."
+    },
+    "cvae_4lde": {
+      "checkpoint": "cvae_4lde/last.ckpt",
+      "vocabulary": "vae_pubchem80m/vocab.json",
+      "tokenizer": "SELFIESTokenizer",
+      "protocols": ["label-conditioned"],
+      "config_path": null,
+      "dataset_family": "Tartarus 4LDE docking",
+      "training_seed": "UNKNOWN",
+      "paper_role": "original 4LDE conditional model and stratified-model initializer",
+      "provenance_caveat": "Exact historical config and training seed are not released; this is distinct from the current stratified config."
+    },
+    "cvae_6y2f": {
+      "checkpoint": "cvae_6y2f/last.ckpt",
+      "vocabulary": "vae_pubchem80m/vocab.json",
+      "tokenizer": "SELFIESTokenizer",
+      "protocols": ["label-conditioned"],
+      "config_path": null,
+      "dataset_family": "Tartarus 6Y2F docking",
+      "training_seed": "UNKNOWN",
+      "paper_role": "original 6Y2F conditional model and stratified-model initializer",
+      "provenance_caveat": "Exact historical config and training seed are not released; this is distinct from the current stratified config."
+    },
+    "cvae_1syh_stratified": {
+      "checkpoint": "cvae_1syh_stratified/last.ckpt",
+      "vocabulary": "vae_pubchem80m/vocab.json",
+      "tokenizer": "SELFIESTokenizer",
+      "protocols": ["label-conditioned-percentile"],
+      "config_path": "configs/model_vae_1syh_stratified.yaml",
+      "dataset_family": "Tartarus 1SYH stratified docking",
+      "training_seed": "UNKNOWN",
+      "paper_role": "stratified 1SYH conditional generation checkpoint",
+      "provenance_caveat": "The current config documents the public protocol; exact historical source revision and training seed for this last.ckpt are not established."
+    },
+    "cvae_4lde_stratified": {
+      "checkpoint": "cvae_4lde_stratified/last.ckpt",
+      "vocabulary": "vae_pubchem80m/vocab.json",
+      "tokenizer": "SELFIESTokenizer",
+      "protocols": ["label-conditioned-percentile"],
+      "config_path": "configs/model_vae_4lde_stratified.yaml",
+      "dataset_family": "Tartarus 4LDE stratified docking",
+      "training_seed": "UNKNOWN",
+      "paper_role": "stratified 4LDE conditional generation checkpoint",
+      "provenance_caveat": "The current config documents the public protocol; exact historical source revision and training seed for this last.ckpt are not established."
+    },
+    "cvae_6y2f_stratified": {
+      "checkpoint": "cvae_6y2f_stratified/last.ckpt",
+      "vocabulary": "vae_pubchem80m/vocab.json",
+      "tokenizer": "SELFIESTokenizer",
+      "protocols": ["label-conditioned-percentile"],
+      "config_path": "configs/model_vae_6y2f_stratified.yaml",
+      "dataset_family": "Tartarus 6Y2F stratified docking",
+      "training_seed": "UNKNOWN",
+      "paper_role": "stratified 6Y2F conditional generation checkpoint",
+      "provenance_caveat": "The current config documents the public protocol; exact historical source revision and training seed for this last.ckpt are not established."
+    },
+    "ablation_ref_selfies_pubchem": {
+      "checkpoint": "ablations/ref_selfies_pubchem/last.ckpt",
+      "vocabulary": "vae_pubchem80m/vocab.json",
+      "tokenizer": "SELFIESTokenizer",
+      "config_path": null,
+      "dataset_family": "PubChem SA-score sample",
+      "training_seed": "UNKNOWN",
+      "paper_role": "historical Exp19 SELFIES/PubChem reference ablation",
+      "provenance_caveat": "The exact historical config is unavailable; configs/ablations/sa_reference_public.yaml is a new public reproduction protocol, not the source of this checkpoint."
+    },
+    "ablation_a1_selfies_tokenization_supp": {
+      "checkpoint": "ablations/a1_selfies_tokenization_supp/last.ckpt",
+      "vocabulary": "vae_pubchem80m/vocab.json",
+      "tokenizer": "SELFIESTokenizer",
+      "config_path": null,
+      "dataset_family": "PubChem SA-score sample with MOSES-pretrained SELFIES backbone",
+      "training_seed": "UNKNOWN",
+      "paper_role": "historical supplementary tokenization/backbone ablation",
+      "provenance_caveat": "Exact historical fine-tuning config is unavailable; this is not the omitted PubChem SMILES-tokenization checkpoint."
+    },
+    "ablation_a2_deterministic_ae": {
+      "checkpoint": "ablations/a2_deterministic_ae/last.ckpt",
+      "vocabulary": "vae_pubchem80m/vocab.json",
+      "tokenizer": "SELFIESTokenizer",
+      "config_path": null,
+      "dataset_family": "PubChem SA-score sample",
+      "training_seed": "UNKNOWN",
+      "paper_role": "historical Exp19 deterministic-autoencoder ablation",
+      "provenance_caveat": "Exact historical config is unavailable; no current public config is asserted to reproduce this checkpoint exactly."
+    },
+    "ablation_a3_no_conditioning": {
+      "checkpoint": "ablations/a3_no_conditioning/last.ckpt",
+      "vocabulary": "vae_pubchem80m/vocab.json",
+      "tokenizer": "SELFIESTokenizer",
+      "config_path": null,
+      "dataset_family": "PubChem SA-score sample",
+      "training_seed": "UNKNOWN",
+      "paper_role": "historical Exp19 no-conditioning ablation",
+      "provenance_caveat": "Exact historical config is unavailable; no current public config is asserted to reproduce this checkpoint exactly."
+    },
+    "ablation_a3_encoder_conditioning": {
+      "checkpoint": "ablations/a3_encoder_conditioning/last.ckpt",
+      "vocabulary": "vae_pubchem80m/vocab.json",
+      "tokenizer": "SELFIESTokenizer",
+      "config_path": null,
+      "dataset_family": "PubChem SA-score sample",
+      "training_seed": "UNKNOWN",
+      "paper_role": "historical Exp19 encoder-only-conditioning ablation",
+      "provenance_caveat": "Exact historical config is unavailable; no current public config is asserted to reproduce this checkpoint exactly."
+    },
+    "ablation_a3_decoder_conditioning": {
+      "checkpoint": "ablations/a3_decoder_conditioning/last.ckpt",
+      "vocabulary": "vae_pubchem80m/vocab.json",
+      "tokenizer": "SELFIESTokenizer",
+      "config_path": null,
+      "dataset_family": "PubChem SA-score sample",
+      "training_seed": "UNKNOWN",
+      "paper_role": "historical Exp19 decoder-only-conditioning ablation",
+      "provenance_caveat": "Exact historical config is unavailable; no current public config is asserted to reproduce this checkpoint exactly."
+    },
+    "ablation_a4_frozen_backbone": {
+      "checkpoint": "ablations/a4_frozen_backbone/last.ckpt",
+      "vocabulary": "vae_pubchem80m/vocab.json",
+      "tokenizer": "SELFIESTokenizer",
+      "config_path": null,
+      "dataset_family": "PubChem SA-score sample",
+      "training_seed": "UNKNOWN",
+      "paper_role": "historical Exp19 frozen-backbone ablation",
+      "provenance_caveat": "Exact historical config is unavailable; no current public config is asserted to reproduce this checkpoint exactly."
+    },
+    "ablation_a4_full_finetune": {
+      "checkpoint": "ablations/a4_full_finetune/last.ckpt",
+      "vocabulary": "vae_pubchem80m/vocab.json",
+      "tokenizer": "SELFIESTokenizer",
+      "config_path": null,
+      "dataset_family": "PubChem SA-score sample",
+      "training_seed": "UNKNOWN",
+      "paper_role": "historical Exp19 full-fine-tuning ablation",
+      "provenance_caveat": "Exact historical config is unavailable; no current public config is asserted to reproduce this checkpoint exactly."
+    },
+    "ablation_a5_linear_annealing": {
+      "checkpoint": "ablations/a5_linear_annealing/last.ckpt",
+      "vocabulary": "vae_pubchem80m/vocab.json",
+      "tokenizer": "SELFIESTokenizer",
+      "config_path": null,
+      "dataset_family": "PubChem SA-score sample",
+      "training_seed": "UNKNOWN",
+      "paper_role": "historical Exp19 linear-beta-annealing ablation",
+      "provenance_caveat": "Exact historical config is unavailable; no current public config is asserted to reproduce this checkpoint exactly."
+    },
+    "ablation_a5_fixed_beta": {
+      "checkpoint": "ablations/a5_fixed_beta/last.ckpt",
+      "vocabulary": "vae_pubchem80m/vocab.json",
+      "tokenizer": "SELFIESTokenizer",
+      "config_path": null,
+      "dataset_family": "PubChem SA-score sample",
+      "training_seed": "UNKNOWN",
+      "paper_role": "historical Exp19 fixed-beta ablation",
+      "provenance_caveat": "Exact historical config is unavailable; no current public config is asserted to reproduce this checkpoint exactly."
+    }
+  },
+  "additional_files": [
+    "vae_pubchem80m/vocab.json",
+    "vae_moses/smiles_vocab_moses.json"
+  ]
+}

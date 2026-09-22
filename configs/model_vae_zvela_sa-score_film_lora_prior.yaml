@@ -1,0 +1,81 @@
+# ============================================================
+# configs/model_vae_zvela_sa-score_film_lora_prior.yaml
+# Experiment 5 / 15: Fine-tune STAR-VAE CVAE on SA Score with FiLM + LoRA
+# + conditional prior (streaming mode on PubChem shards).
+#
+# Usage:
+#   python -m bmfm_sm_gen.launch.run_train fit \
+#     --config configs/model_vae_zvela_sa-score_film_lora_prior.yaml
+#
+# Paths are resolved relative to STAR_VAE_ROOT (set in .env).
+# ============================================================
+
+model:
+  class_path: bmfm_sm_gen.trainers.lm_cvae.CVAELightningModule
+  init_args:
+    model_class: bmfm_sm_gen.models.cvae.ConditionalTransformerVAE
+    model_params:
+      d_model: 512
+      nhead: 8
+      num_encoder_layers: 12
+      num_decoder_layers: 12
+      dim_feedforward: 2048
+      latent_dim: 256
+      dropout: 0.1
+      max_len: 71
+      num_tasks: 1
+    # Set PRETRAINED_VAE_CKPT in your .env file, or override on the command line:
+    # --model.init_args.pretrained_path /path/to/checkpoint.ckpt
+    pretrained_path: ${oc.env:PRETRAINED_VAE_CKPT}
+    lora: both
+    use_conditional_prior: True
+    modulation_scheme: 'film'
+    tokenizer: ${data.init_args.tokenizer}
+    vocab_file: ${data.init_args.vocab_file}
+    learning_rate: 0.0001
+
+data:
+  class_path: 'bmfm_sm_gen.data.dm_mol.MolecularDataModule'
+  init_args:
+    train_mode: stream
+    # Set DATA_DIR in your .env file, pointing to PubChem shards directory
+    data_dir: ${oc.env:DATA_DIR}/pubchem/shards_80m
+    train_csv: null
+    val_csv: null
+    tokenizer: "bmfm_sm_gen.data.base_tokenizer.SELFIESTokenizer"
+    vocab_file: ${oc.env:VOCAB_FILE}
+    max_len: 71
+    batch_size: 128
+    dataset_args:
+      modality: 'selfies'
+      padding: max_length
+      compute_labels:
+        - sa_score
+
+trainer:
+  max_epochs: 20
+  devices: 1
+  num_nodes: 1
+  accelerator: auto
+  default_root_dir: ${oc.env:OUTPUT_DIR,outputs}/cvae_sa_score_film_lora_prior
+  logger:
+    class_path: 'pytorch_lightning.loggers.TensorBoardLogger'
+    init_args:
+      save_dir: '${trainer.default_root_dir}'
+  log_every_n_steps: 10
+  callbacks:
+    - class_path: pytorch_lightning.callbacks.ModelCheckpoint
+      init_args:
+        monitor: val_loss
+        dirpath: '${trainer.default_root_dir}/checkpoints'
+        filename: 'vae-epoch{epoch:02d}-{step}-{val_loss:.2f}'
+        save_top_k: 5
+        mode: min
+        save_last: true
+        save_on_train_epoch_end: False
+    - class_path: 'pytorch_lightning.callbacks.EarlyStopping'
+      init_args:
+        patience: 20
+        monitor: val_loss
+        mode: min
+  val_check_interval: 0.01
